@@ -4,7 +4,7 @@ import React, { createContext, useContext } from 'react';
 const ApiContext = createContext();
 
 export const ApiProvider = ({ children }) => {
-  const backendApi = "eatario-api-production.up.railway.app/api";
+  const backendApi = "https://eatario-api-production.up.railway.app/api";
 
   return (
     <ApiContext.Provider value={{ backendApi }}>
