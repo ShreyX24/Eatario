@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useCart } from "../lib/cartContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import LoadingScreen from "../components/cart/LoadingScreen";
+import CartLoadingScreen from "../components/cart/CartLoadingScreen";
 import CartIsEmpty from "../components/cart/CartIsEmpty";
 import CartOccupied from "../components/cart/CarOccupied";
 import { useApi } from "../lib/apiContext";
@@ -48,7 +48,7 @@ const Cart = () => {
     <>
       {isLoading ? (
         <>
-          <LoadingScreen />
+          <CartLoadingScreen />
         </>
       ) : (
         <>
