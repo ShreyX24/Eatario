@@ -41,7 +41,7 @@ const Orders = () => {
               <td className="hidden md:block px-1 py-3">
                 {handleTimeFormatting(order.createdAt)}
               </td>
-              <td className="px-1 py-3">${order.totalPrice}</td>
+              <td className="px-1 py-3">${parseFloat(order.totalPrice)}</td>
               <td className="hidden md:block overflow-hidden">
                 {order.items?.map((item) => (
                   <>{`${item.title}(${item.quantity}), `}</>

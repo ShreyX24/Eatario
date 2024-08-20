@@ -16,7 +16,7 @@ const Cart = () => {
   const serviceCost = 1.25;
   const discount = 0.2; // 20%
 
-  const total = (subtotal + serviceCost) * (1 - discount);
+  const total = Math.round(((subtotal + serviceCost) * (1 - discount)) * 100) / 100
 
   const uploadOrderToDB = async () => {
     try {
