@@ -5,10 +5,13 @@ import { useNavigate } from "react-router-dom";
 import LoadingScreen from "../components/cart/LoadingScreen";
 import CartIsEmpty from "../components/cart/CartIsEmpty";
 import CartOccupied from "../components/cart/CarOccupied";
+import { useApi } from "../lib/apiContext";
 
 const Cart = () => {
   const { cartItems, removeFromCart, clearCartAfterOrderCreation } = useCart();
   const [isLoading, setIsLoading] = useState(false);
+
+  const { backendApi } = useApi();
 
   const navigate = useNavigate();
 
@@ -16,19 +19,17 @@ const Cart = () => {
   const serviceCost = 1.25;
   const discount = 0.2; // 20%
 
-  const total = Math.round(((subtotal + serviceCost) * (1 - discount)) * 100) / 100
+  const total =
+    Math.round((subtotal + serviceCost) * (1 - discount) * 100) / 100;
 
   const uploadOrderToDB = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "http://localhost:3001/api/createOrder",
-        {
-          cartItems,
-          total,
-        }
-      );
-      console.log("Order created:", response);
+      const response = await axios.post(`${backendApi}/createOrder`, {
+        cartItems,
+        total,
+      });
+      // console.log("Order created:", response);
       // Handle successful order creation (e.g., clear cart, show confirmation)
       if (response.status === 201) {
         clearCartAfterOrderCreation();

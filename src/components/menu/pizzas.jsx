@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { useApi } from "../../lib/apiContext";
+
 
 const Pizzas = () => {
-  const baseUrl = "http://localhost:3001/api";
   const [pizzas, setPizzas] = useState([{}]);
+  const {backendApi} = useApi();
+
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/product`)
+      .get(`${backendApi}/product`)
       .then((response) => {
         if (response && response.data) {
           const filteredPizzas = response.data.filter(
@@ -20,7 +23,7 @@ const Pizzas = () => {
       .catch((error) => {
         console.error("Error fetching data", error);
       });
-  }, []);
+  }, [backendApi]);
 
   return (
     <div className="h-max w-screen flex flex-col p-3 lg:flex-row lg:h-[calc(100vh-80px)] lg:flex-wrap lg:p-0 lg:items-center">

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { useApi } from "../../lib/apiContext";
 
 const Pastas = () => {
-  const baseUrl = "http://localhost:3001/api";
   const [pastas, setPastas] = useState([{}]);
+  const {backendApi} = useApi();
+
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/product`)
+      .get(`${backendApi}/product`)
       .then((response) => {
         if (response && response.data) {
           const filteredPastas = response.data.filter(
@@ -20,7 +22,7 @@ const Pastas = () => {
       .catch((error) => {
         console.error("Error fetching data", error);
       });
-  }, []);
+  }, [backendApi]);
 
   return (
     <div className="h-max w-screen flex flex-col p-3 lg:flex-row lg:h-[calc(100vh-80px)] lg:flex-wrap lg:p-0 lg:items-center">

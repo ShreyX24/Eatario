@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PizzaSizeOptions from "../components/product/pizzaSizeOptions";
-import { useCart } from "../lib/cartContext";
 import axios from "axios";
+import { useCart } from "../lib/cartContext";
+import { useApi } from "../lib/apiContext";
 
 const Product = () => {
   const { id } = useParams();
@@ -11,14 +12,13 @@ const Product = () => {
   const [itemPrice, setItemPrice] = useState(0);
   const [itemTotalPrice, setItemTotalPrice] = useState(0);
   const [itemAddedVisibility, setItemAddedVisibility] = useState(false);
-  const { addToCart } = useCart();
-
   const [item, setItem] = useState(null);
+  const { addToCart } = useCart();
+  const {backendApi} = useApi();
 
-  const baseUrl = "http://localhost:3001/api";
   useEffect(() => {
     axios
-      .get(`${baseUrl}/product`)
+      .get(`${backendApi}/product`)
       .then((response) => {
         if (response && response.data) {
           const filteredProduct = response.data.find(
@@ -34,7 +34,7 @@ const Product = () => {
       .catch((error) => {
         console.error("Error fetching data", error);
       });
-  }, [id]);
+  }, [id, backendApi]);
 
   // useEffect(() => {
   //   if (item) {
@@ -49,7 +49,7 @@ const Product = () => {
       size: itemSize,
       quantity: itemQuantity,
       price: itemPrice,
-      totalPrice: parseFloat(itemTotalPrice,10),
+      totalPrice: parseFloat(itemTotalPrice, 10),
       img: item.img,
     });
     setItemAddedVisibility(true);
@@ -61,19 +61,19 @@ const Product = () => {
     setItemQuantity(1);
   }
 
-  if(item?.catSlug === 'pizzas' && itemSize === 'Regular'){
-    setItemSize('Small')
+  if (item?.catSlug === "pizzas" && itemSize === "Regular") {
+    setItemSize("Small");
   }
 
   useEffect(() => {
     if (item) {
       setItemPrice(item.price);
       setItemTotalPrice(item.price);
-  
+
       if (itemQuantity > 1) {
         setItemTotalPrice(Math.round(item.price * itemQuantity * 100) / 100);
       }
-  
+
       if (item.options) {
         const selectedOption = item.options.find(
           (option) => option.title === itemSize

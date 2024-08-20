@@ -1,13 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useApi } from "../lib/apiContext";
 
 const Orders = () => {
-  const baseUrl = "http://localhost:3001/api";
   const [orders, setOrders] = useState([{}]);
-
+  const {backendApi} = useApi();
   useEffect(() => {
     axios
-      .get(`${baseUrl}/getOrders`)
+      .get(`${backendApi}/getOrders`)
       .then((response) => {
         // console.log(response.data);
         setOrders(response.data);
@@ -15,7 +15,7 @@ const Orders = () => {
       .catch((error) => {
         console.error("Error fetching data", error);
       });
-  }, []);
+  }, [backendApi]);
 
   const handleTimeFormatting = (timestamp) => {
     const date = new Date(timestamp);

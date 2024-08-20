@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { useApi } from "../lib/apiContext";
 
 const Menu = () => {
-  const baseUrl = "http://localhost:3001/api";
   const [menuCategory, setMenuCategory] = useState([{}]);
+  const {backendApi} = useApi();
 
   useEffect(() => {
     axios
-      .get(`${baseUrl}/category`)
+      .get(`${backendApi}/category`)
       .then((response) => {
         // console.log(response.data)
         setMenuCategory(response.data);
@@ -18,7 +19,7 @@ const Menu = () => {
       });
 
     
-  }, []);
+  }, [backendApi]);
 
   return (
     <div className="w-screen h-[calc(100vh-128px)] p-5 lg:h-[80vh]">

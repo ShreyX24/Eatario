@@ -18,6 +18,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import Login from "./pages/login";
 import { AuthProvider } from "./lib/authContext";
 import { CartProvider } from "./lib/cartContext";
+import { ApiProvider } from "./lib/apiContext";
 
 const router = createBrowserRouter([
   {
@@ -45,7 +46,9 @@ function App() {
     <GoogleOAuthProvider clientId="376702196162-ni7avjn9jl1qk5tte0skkid85ioomrpo.apps.googleusercontent.com">
       <AuthProvider>
         <CartProvider>
-          <RouterProvider router={router} />
+          <ApiProvider>
+            <RouterProvider router={router} />
+          </ApiProvider>
         </CartProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
