@@ -26,7 +26,7 @@ const Login = () => {
         );
 
         if (userInfoResponse.ok) {
-          const userInfo = await userInfoResponse.json();
+          // const userInfo = await userInfoResponse.json();
           // console.log("User Info:", userInfo);
 
           setIsLoggedIn(true); // Set login state to true
