@@ -1,15 +1,13 @@
 // AuthContext.js
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext } from "react";
 
 const ApiContext = createContext();
 
 export const ApiProvider = ({ children }) => {
-  const backendApi = "https://eatario-api-production.up.railway.app/api";
+  const backendApi = "https://eatario-api.vercel.app/api";
 
   return (
-    <ApiContext.Provider value={{ backendApi }}>
-      {children}
-    </ApiContext.Provider>
+    <ApiContext.Provider value={{ backendApi }}>{children}</ApiContext.Provider>
   );
 };
 
