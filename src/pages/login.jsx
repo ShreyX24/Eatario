@@ -1,46 +1,35 @@
-import { useGoogleLogin } from "@react-oauth/google";
-import React from "react";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../lib/authContext";
-
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
-
-  const { setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const [googleLoginError, setGoogleLoginError] = useState(false);
 
   //Loging in with google and extracting user info
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      // console.log(tokenResponse);
+  const handleLoginWithGoogle = (token) => {
+    if (token) {
+      const decoded = jwtDecode(token);
+      // console.log(decoded);
+      const userInfo = {
+        sub: decoded.sub,
+        name: decoded.name,
+        given_name: decoded.given_name,
+        family_name: decoded.family_name,
+        picture: decoded.picture,
+        email: decoded.email,
+        email_verified: decoded.email_verified,
+      };
+      // console.log(userInfo);
 
-      
-      try {
-        const userInfoResponse = await fetch(
-          "https://www.googleapis.com/oauth2/v3/userinfo",
-          {
-            headers: {
-              Authorization: `Bearer ${tokenResponse.access_token}`,
-            },
-          }
-        );
+      // login(userInfo);
 
-        if (userInfoResponse.ok) {
-          // const userInfo = await userInfoResponse.json();
-          // console.log("User Info:", userInfo);
+      const username = userInfo.name;
 
-          setIsLoggedIn(true); // Set login state to true
-          navigate('/home'); // Redirect to home page
-          // Here you can handle the user info, e.g., save it to your app's state or send it to your backend
-        } else {
-          console.error("Failed to fetch user info");
-        }
-      } catch (error) {
-        console.error("Error fetching user info:", error);
-      }
-    },
-    onError: (error) => console.error("Login Failed:", error),
-  });
+      navigate(`/u/${username.replace(" ", "")}`); // Redirect to home page
+    }
+  };
 
   return (
     <div className="w-screen h-[calc(100vh-128px)] md:h-[calc(100vh-80px)]">
@@ -53,42 +42,24 @@ const Login = () => {
           />
         </div>
         <div className="w-full h-1/2 md:h-full md:w-1/2 md:flex md:justify-start md:items-center">
-          <div className="h-3/4 w-full p-4 flex flex-col gap-4 bg-red-200 md:h-2/3 md:w-1/2 md:justify-center md:items-center">
+          <div className="h-3/4 w-full p-4 flex flex-col gap-4 bg-red-200 md:h-2/3 md:w-1/2 md:justify-center md:items-start md:px-20">
             <div className=" flex flex-col gap-5 ">
               <span className="font-bold text-2xl">Welcome</span>
               <p>Log into your account or create a new one.</p>
             </div>
-            <div className="flex flex-col gap-2 md:w-3/4">
-              <div className="p-4 h-[40px] w-3/4 rounded flex items-center gap-6  bg-slate-200 hover:bg-slate-100 md:w-full">
-                <img
-                  src="./assests/icons/google.png"
-                  alt=""
-                  height="24"
-                  width="24"
-                  className="object-contain"
-                />
-                <span className="cursor-pointer" onClick={() => googleLogin()}>
-                  Sign in with Google
-                </span>
-              </div>
-              <div className="p-4 h-[40px] w-3/4 rounded flex items-center gap-6  bg-slate-200 hover:bg-slate-100 md:w-full">
-                <img
-                  src="./assests/icons/facebook.png"
-                  alt=""
-                  height="24"
-                  width="24"
-                  className="object-contain"
-                />
-                <span className="cursor-pointer">Sign in with Facebook</span>
-              </div>
-            </div>
-            <div className="md:w-3/4">
-              <span className="p-4 text-sm">
-                New User?{" "}
-                <NavLink to="/register" className="underline">
-                  Register
-                </NavLink>
-              </span>
+            <div className="flex md:w-3/4">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  // console.log(credentialResponse);
+                  handleLoginWithGoogle(credentialResponse.credential);
+                }}
+                onError={() => {
+                  console.log("Login Failed");
+                  setGoogleLoginError(true);
+                }}
+                useOneTap
+              />
+             
             </div>
           </div>
         </div>

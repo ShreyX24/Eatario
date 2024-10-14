@@ -1,15 +1,8 @@
 import React from "react";
 import Logo from "./logo";
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../../lib/authContext";
 
 const DesktopMenu = () => {
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    // Add any additional logout logic here (e.g., clearing tokens, etc.)
-  };
 
   return (
     <>
@@ -77,27 +70,7 @@ const DesktopMenu = () => {
             Orders
           </NavLink>
         </li>
-        {isLoggedIn ? (
-          <li>
-            <span onClick={handleLogout} className="cursor-pointer">
-              Logout
-            </span>
-          </li>
-        ) : (
-          <li>
-            <NavLink
-              to="/login"
-              style={({ isActive, isPending }) => {
-                return {
-                  fontWeight: isActive ? "bold" : "",
-                  color: isPending ? "grey" : "red",
-                };
-              }}
-            >
-              <span>Login</span>
-            </NavLink>
-          </li>
-        )}
+
         <li>
           <NavLink
             to="/cart"
